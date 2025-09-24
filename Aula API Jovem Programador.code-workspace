@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"name": "Front End",
+			"path": "../Users/lucas/OneDrive/Desktop/Modulo 1- Programador de sistemas/Front End"
+		},
+		{
+			"name": "JS",
+			"path": "../Users/lucas/OneDrive/Desktop/Modulo 1- Programador de sistemas/Front End/JS"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "Front End"
+	}
+}
