@@ -15,6 +15,8 @@ import java.util.Optional;
 
         boolean existsUsuarioByEmailContainingAndSenha(String email, String senha);
 
+        Optional<Usuario> findByEmail(String email);
+
         // 1. findById ignorando status = EXCLUIDO
         Optional<Usuario> findByIdAndStatusNot(Long id, EnumStatusUsuario status );
 
