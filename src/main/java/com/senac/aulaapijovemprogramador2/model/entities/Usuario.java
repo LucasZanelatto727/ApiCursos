@@ -10,9 +10,10 @@ import java.util.List;
 @Entity
 public class Usuario {
 
-    public Usuario(){}
+    public Usuario() {
+    }
 
-    public Usuario(Long id , String nome, CPF cpf, String email, String telefone){
+    public Usuario(Long id, String nome, CPF cpf, String email, String telefone) {
         this.setId(id);
         this.setNome(nome);
         this.setCpf(cpf);
@@ -20,7 +21,7 @@ public class Usuario {
         this.setTelefone(telefone);
     }
 
-    public Usuario (UsuarioCriarRequestDto usuario){
+    public Usuario(UsuarioCriarRequestDto usuario) {
         this.email = usuario.email();
         this.senha = usuario.senha();
         this.cpf = new CPF(usuario.cpf());
@@ -42,7 +43,7 @@ public class Usuario {
     private EnumStatusUsuario status = EnumStatusUsuario.ATIVO;
 
     @OneToMany
-    @JoinColumn(name = "usuario_id",nullable = true)
+    @JoinColumn(name = "usuario_id", nullable = true)
     private List<Menu> menuAcesso;
 
     public Long getId() {
@@ -109,15 +110,16 @@ public class Usuario {
         this.menuAcesso = menuAcesso;
     }
 
-    public Usuario atualizarUsuarioFromDTO(Usuario usuarioBanco, UsuarioCriarRequestDto usuarioCriarRequestDto){
+    public Usuario atualizarUsuarioFromDTO(Usuario usuarioBanco, UsuarioCriarRequestDto usuarioCriarRequestDto) {
         usuarioBanco.setCpf(new CPF(usuarioCriarRequestDto.cpf()));
         usuarioBanco.setEmail(usuarioCriarRequestDto.email());
         usuarioBanco.setNome(usuarioCriarRequestDto.nome());
         usuarioBanco.setSenha(usuarioCriarRequestDto.senha());
         return usuarioBanco;
     }
-    public String apresentar(){
-        return " Dados "+ this.nome + "CPF Format"+ this.cpf.toString();
+
+    public String apresentar() {
+        return " Dados " + this.nome + "CPF Format" + this.cpf.toString();
     }
 
 }
