@@ -6,11 +6,11 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 @SpringBootApplication
-public class Aulaapijovemprogramador2Application {
+public class Aulaapijovemprogramador2Application  {
 
-    public static void main(String[] args) {
+	public static void main(String[] args) {
         SpringApplication.run(Aulaapijovemprogramador2Application.class, args);
-    }
+	}
 
 
 }
