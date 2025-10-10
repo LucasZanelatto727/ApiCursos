@@ -46,10 +46,10 @@ public class CursoController {
 
     @PostMapping
     @Operation(summary = "Criar Cursos", description = "Método responsável por criar os cursos!")
-    public ResponseEntity<?> criarCursos(@PathVariable Long id, @RequestBody CursoRequestDto curso) {
+    public ResponseEntity<?> criarCursos(@RequestBody CursoRequestDto curso) {
 
         try {
-            var cursoBanco = cursoRepository.findByIdAndStatusNot(id, EnumStatusCurso.EXCLUIDO).orElse(new Curso(curso));
+            var cursoBanco = cursoRepository.findByIdAndStatusNot(curso.id(), EnumStatusCurso.EXCLUIDO).orElse(new Curso(curso));
 
             if (cursoBanco.getId() != null) {
                 cursoBanco = cursoBanco.atualizarCursoFromDTO(cursoBanco, curso);

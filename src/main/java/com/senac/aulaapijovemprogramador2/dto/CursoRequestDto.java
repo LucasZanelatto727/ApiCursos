@@ -1,5 +1,5 @@
 package com.senac.aulaapijovemprogramador2.dto;
 
-public record CursoRequestDto (String nome){
+public record CursoRequestDto (Long id, String nome, String senha){
 
 }

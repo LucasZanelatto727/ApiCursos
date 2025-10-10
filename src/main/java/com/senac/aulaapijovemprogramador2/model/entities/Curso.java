@@ -19,6 +19,7 @@ public class Curso{
 
     public Curso (CursoRequestDto curso){
         this.nome =curso.nome();
+        this.senha = curso.senha();
     }
 
     @Id
@@ -90,6 +91,7 @@ public class Curso{
 
     public Curso atualizarCursoFromDTO(Curso cursoBanco, CursoRequestDto cursoRequestDto){
         cursoBanco.setNome(cursoRequestDto.nome());
+        cursoBanco.setSenha(cursoRequestDto.senha());
         return cursoBanco;
     }
 
