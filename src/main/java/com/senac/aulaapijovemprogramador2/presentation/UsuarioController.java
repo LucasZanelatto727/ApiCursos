@@ -66,7 +66,7 @@ public class UsuarioController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Atualizar usuario",description = "Metodo resposavel por atualizar usuário")
-    public ResponseEntity<?> atulizarUsuario(@PathVariable Long id, @RequestBody UsuarioCriarRequestDto usuario){
+    public ResponseEntity<?> atualizarUsuario(@PathVariable Long id, @RequestBody UsuarioCriarRequestDto usuario){
 
         try {
             var usuarioSalvo = usuarioService.salvarUsuario(usuario);
@@ -79,6 +79,7 @@ public class UsuarioController {
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete de usuário!",description = "Método responsavel por deletar um usuario")
     public ResponseEntity<?> deletarUsuario(@PathVariable Long id){
+
         return usuarioService.excluirUsuario(id) ?
                 ResponseEntity.ok().build() :
                 ResponseEntity.notFound().build();

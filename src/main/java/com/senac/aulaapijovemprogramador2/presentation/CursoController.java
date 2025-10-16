@@ -1,12 +1,14 @@
 package com.senac.aulaapijovemprogramador2.presentation;
 
-import com.senac.aulaapijovemprogramador2.application.dto.CursoRequestDto;
-import com.senac.aulaapijovemprogramador2.domain.entities.Curso;
-import com.senac.aulaapijovemprogramador2.domain.repository.CursoRepository;
+import com.senac.aulaapijovemprogramador2.application.dto.curso.CursoRequestDto;
+import com.senac.aulaapijovemprogramador2.application.dto.curso.CursoResponseDto;
+import com.senac.aulaapijovemprogramador2.application.services.CursoService;
+
 import com.senac.aulaapijovemprogramador2.domain.valueobjects.EnumStatusCurso;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,28 +20,35 @@ import java.util.List;
 public class CursoController {
 
     @Autowired
-    private CursoRepository cursoRepository;
+    private CursoService cursoService;
 
     @GetMapping
     @Operation(summary = "Listar todos", description = "Método para listar todos os cursos!")
-    public ResponseEntity<List<Curso>> listarTodos() {
+    public ResponseEntity<List<CursoResponseDto>> listarTodos() {
 
-        var cursos = cursoRepository.findAllByStatusNot(EnumStatusCurso.EXCLUIDO);
-        return ResponseEntity.ok(cursos);
+        return ResponseEntity.ok(cursoService.listarTodos());
     }
 
 
     @GetMapping("/{id}")
     @Operation(summary = "Consulta de curso por ID", description = "Médoto responsável por consultar um único curso por ID e se não existir retorna null!")
     public ResponseEntity<?> buscarCursoPorId(@PathVariable Long id) {
-        var curso = cursoRepository.findByIdAndStatusNot(id, EnumStatusCurso.EXCLUIDO).orElse(null);
+        try {
 
-        if (curso == null) {
-            return ResponseEntity.notFound().build();
+            var curso = cursoService.buscarPorId(id);
+
+            if(curso == null){
+                return ResponseEntity.notFound().build();
+            }
+
+            return  ResponseEntity.ok(curso);
+
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-
-        return ResponseEntity.ok(curso);
-
+        catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
 
@@ -48,17 +57,9 @@ public class CursoController {
     public ResponseEntity<?> criarCursos(@PathVariable Long id, @RequestBody CursoRequestDto curso) {
 
         try {
-            var cursoBanco = cursoRepository.findByIdAndStatusNot(id, EnumStatusCurso.EXCLUIDO).orElse(new Curso(curso));
-
-            if (cursoBanco.getId() != null) {
-                cursoBanco = cursoBanco.atualizarCursoFromDTO(cursoBanco, curso);
-            }
-
-            cursoRepository.save(cursoBanco);
-            return ResponseEntity.ok(cursoBanco);
-
-
-        } catch (Exception e) {
+            var cursoSalvo = cursoService.salvarCurso(curso);
+            return ResponseEntity.ok(cursoSalvo);
+        }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -68,32 +69,21 @@ public class CursoController {
     @Operation(summary = "Atualizar curso", description = "Método resposável por atualizar usuário!")
     public ResponseEntity<?> atualizarCurso(@PathVariable Long id, @RequestBody CursoRequestDto curso) {
 
-        var cursoBanco = cursoRepository.findByIdAndStatusNot(id, EnumStatusCurso.EXCLUIDO).orElse(null);
-        if (cursoBanco == null) {
-            return ResponseEntity.notFound().build();
+        try {
+            var cursoSalvo = cursoService.salvarCurso(curso);
+            return ResponseEntity.ok(cursoSalvo);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-
-        var cursoSave = cursoBanco.atualizarCursoFromDTO(cursoBanco, curso);
-
-        cursoRepository.save(cursoSave);
-        return ResponseEntity.ok(cursoSave);
     }
-
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete de curso!", description = "Método responsável por deletar um curso!")
     public ResponseEntity<?> deletarCurso(@PathVariable Long id) {
 
-        var curso = cursoRepository.findById(id).orElse(null);
-
-        if (curso == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        curso.setStatus(EnumStatusCurso.EXCLUIDO);
-        cursoRepository.save(curso);
-
-        return ResponseEntity.ok().build();
+        return cursoService.excluirCurso(id) ?
+                ResponseEntity.ok().build() :
+                ResponseEntity.notFound().build();
     }
 
 
@@ -101,33 +91,18 @@ public class CursoController {
     @Operation(summary = "Bloquear de curso!", description = "Método responsável por Bloquear um curso!")
     public ResponseEntity<?> atualizarBloquear(@PathVariable Long id) {
 
-        var curso = cursoRepository.findByIdAndStatusNot(id, EnumStatusCurso.EXCLUIDO).orElse(null);
-
-        if (curso == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        curso.setStatus(EnumStatusCurso.BLOQUEADO);
-        cursoRepository.save(curso);
-
-        return ResponseEntity.ok().build();
+        return cursoService.bloquearCurso(id) ?
+                ResponseEntity.ok().build() :
+                ResponseEntity.notFound().build();
     }
-
 
     @PatchMapping("/{id}/desbloquear")
     @Operation(summary = "Desbloquear de curso!", description = "Método responsável por Desbloquear um curso!")
     public ResponseEntity<?> atualizarDesbloquear(@PathVariable Long id) {
 
-        var curso = cursoRepository.findByIdAndStatusNot(id, EnumStatusCurso.EXCLUIDO).orElse(null);
-
-        if (curso == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        curso.setStatus(EnumStatusCurso.ATIVO);
-        cursoRepository.save(curso);
-
-        return ResponseEntity.ok().build();
+        return cursoService.desbloquearCurso(id) ?
+                ResponseEntity.ok().build() :
+                ResponseEntity.notFound().build();
     }
 
 
@@ -135,16 +110,9 @@ public class CursoController {
     @Operation(summary = "Publicar um curso!", description = "Método responsável por Publicar um curso (isPublicado = true)")
     public ResponseEntity<?> publicarCurso(@PathVariable Long id) {
 
-        var curso = cursoRepository.findById(id).orElse(null);
-
-        if (curso == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        curso.setisPublicado(true);
-        cursoRepository.save(curso);
-
-        return ResponseEntity.ok().build();
+        return cursoService.publicarCurso(id) ?
+                ResponseEntity.ok().build() :
+                ResponseEntity.notFound().build();
     }
 
     @PutMapping("/{id}/editar")

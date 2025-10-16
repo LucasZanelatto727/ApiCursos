@@ -1,6 +1,8 @@
 package com.senac.aulaapijovemprogramador2.domain.entities;
 
-import com.senac.aulaapijovemprogramador2.application.dto.CursoRequestDto;
+import com.senac.aulaapijovemprogramador2.application.dto.curso.CursoRequestDto;
+import com.senac.aulaapijovemprogramador2.application.dto.usuario.UsuarioCriarRequestDto;
+import com.senac.aulaapijovemprogramador2.domain.valueobjects.CPF;
 import com.senac.aulaapijovemprogramador2.domain.valueobjects.EnumStatusCurso;
 import jakarta.persistence.*;
 
@@ -88,8 +90,8 @@ public class Curso{
         this.status = status;
     }
 
-    public Curso atualizarCursoFromDTO(Curso cursoBanco, CursoRequestDto cursoRequestDto){
-        cursoBanco.setNome(cursoRequestDto.nome());
+    public Curso atualizarCursoFromDTO(Curso cursoBanco, CursoRequestDto dto){
+        cursoBanco.setNome(dto.nome());
         return cursoBanco;
     }
 
