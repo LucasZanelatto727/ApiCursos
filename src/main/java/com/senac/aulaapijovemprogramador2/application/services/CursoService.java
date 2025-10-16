@@ -41,13 +41,13 @@ public class CursoService {
 
     public CursoResponseDto salvarCurso(CursoRequestDto dto) throws Exception {
         var cursoBanco = cursoRepository
-                .findByIdAndStatusNot(cursoRequestDto.dto(),
+                .findByIdAndStatusNot(dto.id(),
                         EnumStatusCurso.EXCLUIDO)
                 .orElse(new Curso(dto));
 
         if(cursoBanco.getId() != null){
             cursoBanco = cursoBanco
-                    .atualizarCursoFromDTO(cursoBanco, cursoRequest);
+                    .atualizarCursoFromDTO(cursoBanco, dto);
         }
 
         cursoRepository.save(cursoBanco);
@@ -136,10 +136,10 @@ public class CursoService {
                 }
             }
 
-            var cursoSave = cursoBanco.atualizarCursoFromDTO(cursoBanco, curso);
+           // var cursoSave = cursoBanco.atualizarCursoFromDTO(cursoBanco, cursoSave);
 
-            cursoRepository.save(cursoSave);
-            return ResponseEntity.ok(curso);
+            cursoRepository.save(cursoBanco);
+            return true;
 
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage()).hasBody();
