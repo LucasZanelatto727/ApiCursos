@@ -4,6 +4,7 @@ import com.senac.aulaapijovemprogramador2.application.dto.curso.CursoRequestDto;
 import com.senac.aulaapijovemprogramador2.application.dto.curso.CursoResponseDto;
 import com.senac.aulaapijovemprogramador2.application.services.CursoService;
 
+import com.senac.aulaapijovemprogramador2.domain.repository.CursoRepository;
 import com.senac.aulaapijovemprogramador2.domain.valueobjects.EnumStatusCurso;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,6 +22,9 @@ public class CursoController {
 
     @Autowired
     private CursoService cursoService;
+
+    @Autowired
+    private CursoRepository cursoRepository;
 
     @GetMapping
     @Operation(summary = "Listar todos", description = "Método para listar todos os cursos!")
