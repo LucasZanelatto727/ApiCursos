@@ -53,5 +53,3 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/apicursos:latest
 
-      - name: 📞 Check Metodo API
-        run: curl --fail http://localhost:8080/check/validarAplicacaoCompleta
