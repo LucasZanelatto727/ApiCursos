@@ -1,26 +1,28 @@
 package com.senac.aulaapijovemprogramador2.domain.entities;
 
 import com.senac.aulaapijovemprogramador2.application.dto.curso.CursoRequestDto;
-import com.senac.aulaapijovemprogramador2.application.dto.usuario.UsuarioCriarRequestDto;
-import com.senac.aulaapijovemprogramador2.domain.valueobjects.CPF;
 import com.senac.aulaapijovemprogramador2.domain.valueobjects.EnumStatusCurso;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "curso")
-public class Curso{
+public class Curso {
 
-    public Curso(){}
-
-    public Curso(Long id , String nomeCurso, String instrutor, boolean isPublicado){
+    public Curso(Long id, String nomeCurso, String instrutor, boolean isPublicado) {
         this.setId(id);
         this.setNomeCurso(nomeCurso);
         this.setInstrutor(instrutor);
         this.setisPublicado(isPublicado);
     }
 
-    public Curso (CursoRequestDto curso){
-        this.nome =curso.nome();
+    public Curso(CursoRequestDto curso) {
+        this.nome = curso.nome();
     }
 
     @Id
@@ -34,71 +36,23 @@ public class Curso{
     private String senha;
     private EnumStatusCurso status = EnumStatusCurso.ATIVO;
 
-    public Long getId(){
-        return id;
-    }
-
-    public void setId (Long id){
-        this.id = id;
-    }
-
-    public String getNomeCurso(){
-        return nomeCurso;
-    }
-
-    public void setNomeCurso (String nomeCurso){
-        this.nomeCurso = nomeCurso;
-    }
-
-    public String getInstrutor(){
-        return instrutor;
-    }
-
-    public void setInstrutor (String instrutor){
-        this.instrutor = instrutor;
-    }
-
-    public boolean getIsPublicado(){
+    public boolean getIsPublicado() {
         return isPublicado;
     }
 
-    public void setisPublicado (boolean isPublicado){
+    public void setisPublicado(boolean isPublicado) {
         this.isPublicado = isPublicado;
     }
 
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-
-    public EnumStatusCurso getStatus() {
-        return status;
-    }
-
-    public void setStatus(EnumStatusCurso status) {
-        this.status = status;
-    }
-
-    public Curso atualizarCursoFromDTO(Curso cursoBanco, CursoRequestDto dto){
+    public Curso atualizarCursoFromDTO(Curso cursoBanco, CursoRequestDto dto) {
         cursoBanco.setNome(dto.nome());
         return cursoBanco;
     }
 
-    public String apresentar(){
+    public String apresentar() {
 
         return "Você está matriculado no curso de "
-                +this.nomeCurso+ " com o instrutor " +this.instrutor;
+                + this.nomeCurso + " com o instrutor " + this.instrutor;
 
     }
 }

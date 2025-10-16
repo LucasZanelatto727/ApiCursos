@@ -1,22 +1,17 @@
 package com.senac.aulaapijovemprogramador2.domain.entities;
 
-public class CursoTecnico extends Curso{
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
-    public CursoTecnico(){}
+@AllArgsConstructor
+@NoArgsConstructor
+public class CursoTecnico extends Curso {
 
     private String tecnologo;
 
-    public CursoTecnico(Long id, String nomeCurso, String instrutor, boolean isPublicado,
-                        String tecnologo){
-        super(id,nomeCurso,instrutor,isPublicado);
-        this.tecnologo = tecnologo;
-    }
-
-    public String getTecnologo() {
-        return tecnologo;
-    }
-
-    public void setTecnologo(String tecnologo) {
+    public CursoTecnico(Long id, String nomeCurso, String instrutor,
+                        boolean isPublicado, String tecnologo) {
+        super(id, nomeCurso, instrutor, isPublicado);
         this.tecnologo = tecnologo;
     }
 }

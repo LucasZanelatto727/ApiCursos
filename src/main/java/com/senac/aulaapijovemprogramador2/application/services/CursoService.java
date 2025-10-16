@@ -2,13 +2,11 @@ package com.senac.aulaapijovemprogramador2.application.services;
 
 import com.senac.aulaapijovemprogramador2.application.dto.curso.CursoResponseDto;
 import com.senac.aulaapijovemprogramador2.application.dto.curso.CursoRequestDto;
-import com.senac.aulaapijovemprogramador2.application.dto.usuario.UsuarioCriarRequestDto;
-import com.senac.aulaapijovemprogramador2.application.dto.usuario.UsuarioResponseDto;
+
 import com.senac.aulaapijovemprogramador2.domain.entities.Curso;
-import com.senac.aulaapijovemprogramador2.domain.entities.Usuario;
 import com.senac.aulaapijovemprogramador2.domain.repository.CursoRepository;
 import com.senac.aulaapijovemprogramador2.domain.valueobjects.EnumStatusCurso;
-import com.senac.aulaapijovemprogramador2.domain.valueobjects.EnumStatusUsuario;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,15 +20,16 @@ public class CursoService {
     @Autowired
     private CursoRepository cursoRepository;
 
-    public List<CursoResponseDto> listarTodos(){
+    public List<CursoResponseDto> listarTodos() {
 
-        return  cursoRepository
+        return cursoRepository
                 .findAllByStatusNot(EnumStatusCurso.EXCLUIDO)
                 .stream()
                 .map(CursoResponseDto::new)
                 .collect(Collectors.toList());
     }
-    public CursoResponseDto buscarPorId(Long id){
+
+    public CursoResponseDto buscarPorId(Long id) {
 
         return cursoRepository.findByIdAndStatusNot(id, EnumStatusCurso.EXCLUIDO)
                 .stream()
@@ -45,7 +44,7 @@ public class CursoService {
                         EnumStatusCurso.EXCLUIDO)
                 .orElse(new Curso(dto));
 
-        if(cursoBanco.getId() != null){
+        if (cursoBanco.getId() != null) {
             cursoBanco = cursoBanco
                     .atualizarCursoFromDTO(cursoBanco, dto);
         }
@@ -54,37 +53,37 @@ public class CursoService {
         return new CursoResponseDto(cursoBanco);
     }
 
-    public boolean excluirCurso(Long id){
-        try{
+    public boolean excluirCurso(Long id) {
+        try {
             var curso = cursoRepository.findById(id).orElse(null);
 
-            if(curso == null){
+            if (curso == null) {
                 return false;
             }
 
             alterarStatusCurso(curso, EnumStatusCurso.EXCLUIDO);
-
             return true;
-        }catch (Exception e){
+
+        } catch (Exception e) {
             System.out.print("Erro ao excluir curso!");
             return false;
         }
     }
 
-    public boolean bloquearCurso(Long id){
+    public boolean bloquearCurso(Long id) {
 
         try {
 
-            var curso = cursoRepository.findByIdAndStatusNot(id,EnumStatusCurso.EXCLUIDO).orElse(null);
+            var curso = cursoRepository.findByIdAndStatusNot(id, EnumStatusCurso.EXCLUIDO).orElse(null);
 
-            if(curso == null){
+            if (curso == null) {
                 return false;
             }
 
             alterarStatusCurso(curso, EnumStatusCurso.BLOQUEADO);
-
             return true;
-        }catch (Exception e){
+
+        } catch (Exception e) {
             System.out.println("Erro ao bloquear curso!");
             return false;
         }
@@ -102,6 +101,7 @@ public class CursoService {
 
             alterarStatusCurso(curso, EnumStatusCurso.ATIVO);
             return true;
+
         } catch (Exception e) {
             System.out.println("Erro ao desbloquear curso!");
             return false;
@@ -122,7 +122,7 @@ public class CursoService {
         return ResponseEntity.ok().build().hasBody();
     }
 
-    public boolean editarCurso(Long id){
+    public boolean editarCurso(Long id) {
 
         try {
             var cursoBanco = cursoRepository.findByIdAndStatusNot(id, EnumStatusCurso.EXCLUIDO).orElse(null);
@@ -136,8 +136,6 @@ public class CursoService {
                 }
             }
 
-           // var cursoSave = cursoBanco.atualizarCursoFromDTO(cursoBanco, cursoSave);
-
             cursoRepository.save(cursoBanco);
             return true;
 
@@ -147,7 +145,7 @@ public class CursoService {
     }
 
 
-    private void alterarStatusCurso(Curso curso, EnumStatusCurso statusCurso){
+    private void alterarStatusCurso(Curso curso, EnumStatusCurso statusCurso) {
         curso.setStatus(statusCurso);
         cursoRepository.save(curso);
     }

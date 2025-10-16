@@ -37,20 +37,19 @@ public class CursoController {
     @GetMapping("/{id}")
     @Operation(summary = "Consulta de curso por ID", description = "Médoto responsável por consultar um único curso por ID e se não existir retorna null!")
     public ResponseEntity<?> buscarCursoPorId(@PathVariable Long id) {
-        try {
 
+        try {
             var curso = cursoService.buscarPorId(id);
 
-            if(curso == null){
+            if (curso == null) {
                 return ResponseEntity.notFound().build();
             }
 
-            return  ResponseEntity.ok(curso);
+            return ResponseEntity.ok(curso);
 
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
@@ -58,12 +57,12 @@ public class CursoController {
 
     @PostMapping
     @Operation(summary = "Criar Cursos", description = "Método responsável por criar os cursos!")
-    public ResponseEntity<?> criarCursos(@PathVariable Long id, @RequestBody CursoRequestDto curso) {
+    public ResponseEntity<?> criarCursos(@RequestBody CursoRequestDto curso) {
 
         try {
             var cursoSalvo = cursoService.salvarCurso(curso);
             return ResponseEntity.ok(cursoSalvo);
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -76,7 +75,7 @@ public class CursoController {
         try {
             var cursoSalvo = cursoService.salvarCurso(curso);
             return ResponseEntity.ok(cursoSalvo);
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
