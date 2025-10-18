@@ -128,8 +128,8 @@ public class CursoService {
             var cursoBanco = cursoRepository.findByIdAndStatusNot(id, EnumStatusCurso.EXCLUIDO).orElse(null);
 
             if (cursoBanco.getIsPublicado()) {
-                if (!cursoBanco.getNome().equals(cursoBanco.getNome())) {
-                    return ResponseEntity.badRequest().body("Não é permitido alterar o nome após a publicação").hasBody();
+                if (!cursoBanco.getNomeCurso().equals(cursoBanco.getNomeCurso())) {
+                    return ResponseEntity.badRequest().body("Não é permitido alterar o nome do curso após a publicação").hasBody();
                 }
                 if (!cursoBanco.getInstrutor().equals(cursoBanco.getInstrutor())) {
                     return ResponseEntity.badRequest().body("Não é permitido alterar o instrutor após a publicação").hasBody();
