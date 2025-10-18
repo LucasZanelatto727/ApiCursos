@@ -126,7 +126,7 @@ public class CursoController {
             var cursoBanco = cursoRepository.findByIdAndStatusNot(id, EnumStatusCurso.EXCLUIDO).orElse(null);
 
             if (cursoBanco.getIsPublicado()) {
-                if (!cursoBanco.getNome().equals(cursoBanco.getNome())) {
+                if (!cursoBanco.getNome().equals(cursoBanco.getNomeCurso())) {
                     return ResponseEntity.badRequest().body("Não é permitido alterar o nome após a publicação");
                 }
                 if (!cursoBanco.getInstrutor().equals(cursoBanco.getInstrutor())) {

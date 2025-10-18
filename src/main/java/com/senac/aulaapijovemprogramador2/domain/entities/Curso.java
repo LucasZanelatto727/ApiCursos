@@ -23,6 +23,8 @@ public class Curso {
 
     public Curso(CursoRequestDto curso) {
         this.nome = curso.nome();
+        this.nomeCurso = curso.nomeCurso();
+        this.instrutor = curso.instrutor();
     }
 
     @Id
@@ -46,6 +48,8 @@ public class Curso {
 
     public Curso atualizarCursoFromDTO(Curso cursoBanco, CursoRequestDto dto) {
         cursoBanco.setNome(dto.nome());
+        cursoBanco.setNomeCurso(dto.nomeCurso());
+        cursoBanco.setInstrutor(dto.instrutor());
         return cursoBanco;
     }
 
