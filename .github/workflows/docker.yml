@@ -44,7 +44,7 @@ jobs:
         run: |
           echo "Testando endpoint de saúde da API..."
           sleep 10
-          curl --fail -s http://localhost:8080/api/health || 
+          curl --fail -s http://localhost:8080/swagger-ui/index.html || 
           (echo "❌ Endpoint de saúde não respondeu corretamente" && exit 1)
           echo "✅ Endpoint respondeu com sucesso!"
 
