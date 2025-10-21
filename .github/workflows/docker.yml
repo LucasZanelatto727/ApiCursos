@@ -37,6 +37,12 @@ jobs:
       - name: 📞 Realizar teste de saúde na API
         run: curl --fail http://localhost:8080/swagger-ui/index.html
 
+      - name: 🚀 Subir a aplicação
+        run: |
+              docker compose up -d
+              sleep 10
+
+
       - name: 🧪 Testar endpoint da aplicação
         run: |
                 echo "Testando endpoint de saúde da API..."
