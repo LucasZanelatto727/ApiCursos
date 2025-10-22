@@ -10,7 +10,7 @@ public class Cliente extends Usuario {
     }
 
     public Cliente(Long id , String nome, CPF cpf, String email, BigDecimal valorConsumido, String telefone) {
-        super(id,nome,cpf,email , telefone);
+        //super(id,nome,cpf,email , telefone);
 
         this.setValorConsumido(valorConsumido);
     }

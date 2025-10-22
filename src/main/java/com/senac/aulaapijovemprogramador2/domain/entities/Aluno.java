@@ -2,6 +2,7 @@ package com.senac.aulaapijovemprogramador2.domain.entities;
 
 import com.senac.aulaapijovemprogramador2.domain.valueobjects.CPF;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public class Aluno extends Usuario {
 
     public Aluno(Long id, String nome, CPF cpf, String email, String telefone,
                  List<Curso> cursa, String frequencia, String nota) {
-        super(id, nome, cpf, email, telefone);
+        //super(id, nome, cpf, email, telefone);
         this.cursa = cursa;
         this.frequencia = frequencia;
         this.nota = nota;

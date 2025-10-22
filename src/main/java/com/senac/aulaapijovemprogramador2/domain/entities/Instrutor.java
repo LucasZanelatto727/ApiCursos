@@ -1,54 +1,46 @@
 package com.senac.aulaapijovemprogramador2.domain.entities;
 
 import com.senac.aulaapijovemprogramador2.domain.valueobjects.CPF;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@DiscriminatorValue("INSTRUTOR")
 public class Instrutor extends Usuario{
 
-    public Instrutor(){}
-
     private String salario;
-    private List<Curso> leciona;
     private String formacao;
 
+    // Relação exemplo: um instrutor pode lecionar vários cursos
+    @OneToMany
+    @JoinColumn(name = "curso_leciona")
+    private List<Curso> leciona;
+
     public Instrutor(Long id , String nome, CPF cpf, String email, String telefone,
-                     String salario, List<Curso> leciona, String formacao){
+                     String salario, String formacao, List<Curso> leciona){
         super(id, nome, cpf, email, telefone);
         this.salario = salario;
-        this.leciona = leciona;
         this.formacao = formacao;
-    }
-
-    public String getSalario() {
-        return salario;
-    }
-
-    public void setSalario(String salario) {
-        this.salario = salario;
-    }
-
-    public List<Curso> getLeciona() {
-        return leciona;
-    }
-
-    public void setLeciona(List<Curso> leciona) {
         this.leciona = leciona;
-    }
-
-    public String getFormacao() {
-        return formacao;
-    }
-
-    public void setFormacao(String formacao) {
-        this.formacao = formacao;
     }
     
     @Override
     public String apresentar(){
 
-        return "Instrutor, você leciona para o curso de " +this.leciona+ ". Sua formação é em "
-                +this.formacao+ " e seu salário é de " +this.salario;
+        return "Instrutor " + this.getNome() +
+                " | Formação: " + this.formacao +
+                " | Salário: " + this.salario +
+                " | Leciona cursos: " + (leciona != null ? leciona.size() : 0);
 
     }
 }
