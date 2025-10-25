@@ -21,7 +21,7 @@ public class Instrutor extends Usuario{
     private String salario;
     private String formacao;
 
-    // Relação exemplo: um instrutor pode lecionar vários cursos
+    // Relação exemplo: um instrutor pode lecionar vários cursos e os cursos podem ter apenas um instrutor
     @OneToMany
     @JoinColumn(name = "curso_leciona")
     private List<Curso> leciona;

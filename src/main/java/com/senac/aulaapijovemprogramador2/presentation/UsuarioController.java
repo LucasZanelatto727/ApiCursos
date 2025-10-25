@@ -52,7 +52,7 @@ public class UsuarioController {
     }
 
     @PostMapping
-    @Operation(summary = "Criar usuario",description = "Metodo resposavel por criar usuário")
+    @Operation(summary = "Criar usuario",description = "Método responsável por criar usuário")
     public ResponseEntity<?> criarUsuario(@RequestBody UsuarioCriarRequestDto usuario){
 
         try {
@@ -65,7 +65,7 @@ public class UsuarioController {
 
 
     @PutMapping("/{id}")
-    @Operation(summary = "Atualizar usuario",description = "Metodo resposavel por atualizar usuário")
+    @Operation(summary = "Atualizar usuario",description = "Método responsável por atualizar usuário")
     public ResponseEntity<?> atualizarUsuario(@PathVariable Long id, @RequestBody UsuarioCriarRequestDto usuario){
 
         try {
@@ -77,7 +77,7 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Delete de usuário!",description = "Método responsavel por deletar um usuario")
+    @Operation(summary = "Delete de usuário!",description = "Método responsável por deletar um usuário")
     public ResponseEntity<?> deletarUsuario(@PathVariable Long id){
 
         return usuarioService.excluirUsuario(id) ?
@@ -86,7 +86,7 @@ public class UsuarioController {
     }
 
     @PatchMapping("/{id}/bloquear")
-    @Operation(summary = "Bloquear de usuário!",description = "Método responsavel por Bloquear um usuario")
+    @Operation(summary = "Bloquear de usuário!",description = "Método responsável por Bloquear um usuário")
     public ResponseEntity<?> atualizarBloquear(@PathVariable Long id){
 
         return usuarioService.bloquearUsuario(id) ?
@@ -97,7 +97,7 @@ public class UsuarioController {
 
 
     @PatchMapping("/{id}/desbloquear")
-    @Operation(summary = "Desbloquear de usuário!",description = "Método responsavel por Desbloquear um usuario")
+    @Operation(summary = "Desbloquear de usuário!",description = "Método responsável por Desbloquear um usuário")
     public ResponseEntity<?> atualizarDesbloquear(@PathVariable Long id){
 
         return usuarioService.desbloquearUsuario(id) ?

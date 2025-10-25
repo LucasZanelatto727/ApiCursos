@@ -4,8 +4,6 @@ import com.senac.aulaapijovemprogramador2.application.dto.curso.CursoRequestDto;
 import com.senac.aulaapijovemprogramador2.application.dto.curso.CursoResponseDto;
 import com.senac.aulaapijovemprogramador2.application.services.CursoService;
 
-import com.senac.aulaapijovemprogramador2.domain.repository.CursoRepository;
-import com.senac.aulaapijovemprogramador2.domain.valueobjects.EnumStatusCurso;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +21,8 @@ public class CursoController {
     @Autowired
     private CursoService cursoService;
 
-    @Autowired
-    private CursoRepository cursoRepository;
-
     @GetMapping
-    @Operation(summary = "Listar todos", description = "Método para listar todos os cursos!")
+    @Operation(summary = "Listar todos os cursos", description = "Método para listar todos os cursos!")
     public ResponseEntity<List<CursoResponseDto>> listarTodos() {
 
         return ResponseEntity.ok(cursoService.listarTodos());
@@ -120,29 +115,17 @@ public class CursoController {
 
     @PutMapping("/{id}/editar")
     @Operation(summary = "Impedir a edição de um curso publicado!", description = "Método responsável por impedir a edição de um curso já publicado")
-    public ResponseEntity<?> editarCurso(@PathVariable Long id, @RequestBody CursoRequestDto curso) {
+    public ResponseEntity<?> editarCurso(@PathVariable Long id, @RequestBody CursoRequestDto dto) {
 
         try {
-            var cursoBanco = cursoRepository.findByIdAndStatusNot(id, EnumStatusCurso.EXCLUIDO).orElse(null);
+            return cursoService.editarCurso(id, dto) ?
+                    ResponseEntity.ok().build() :
+                    ResponseEntity.notFound().build();
 
-            if (cursoBanco.getIsPublicado()) {
-                if (!cursoBanco.getNome().equals(cursoBanco.getNomeCurso())) {
-                    return ResponseEntity.badRequest().body("Não é permitido alterar o nome após a publicação");
-                }
-                if (!cursoBanco.getInstrutor().equals(cursoBanco.getInstrutor())) {
-                    return ResponseEntity.badRequest().body("Não é permitido alterar o instrutor após a publicação");
-                }
-            }
-
-            var cursoSave = cursoBanco.atualizarCursoFromDTO(cursoBanco, curso);
-
-            cursoRepository.save(cursoSave);
-            return ResponseEntity.ok(curso);
-
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (IllegalArgumentException ex) {
+            // Regras de negócio bloqueando edição
+            return ResponseEntity.badRequest().body(ex.getMessage());
         }
-
     }
 }
 

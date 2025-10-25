@@ -8,10 +8,10 @@ import com.senac.aulaapijovemprogramador2.domain.repository.CursoRepository;
 import com.senac.aulaapijovemprogramador2.domain.valueobjects.EnumStatusCurso;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -113,35 +113,39 @@ public class CursoService {
         var curso = cursoRepository.findById(id).orElse(null);
 
         if (curso == null) {
-            return ResponseEntity.notFound().build().hasBody();
+            return false;
         }
 
         curso.setisPublicado(true);
         cursoRepository.save(curso);
 
-        return ResponseEntity.ok().build().hasBody();
+        return true;
     }
 
-    public boolean editarCurso(Long id) {
+    public boolean editarCurso(Long id, CursoRequestDto dto) {
 
-        try {
-            var cursoBanco = cursoRepository.findByIdAndStatusNot(id, EnumStatusCurso.EXCLUIDO).orElse(null);
+        var cursoBanco = cursoRepository.findByIdAndStatusNot(id, EnumStatusCurso.EXCLUIDO)
+                .orElse(null);
 
-            if (cursoBanco.getIsPublicado()) {
-                if (!cursoBanco.getNomeCurso().equals(cursoBanco.getNomeCurso())) {
-                    return ResponseEntity.badRequest().body("Não é permitido alterar o nome do curso após a publicação").hasBody();
-                }
-                if (!cursoBanco.getInstrutor().equals(cursoBanco.getInstrutor())) {
-                    return ResponseEntity.badRequest().body("Não é permitido alterar o instrutor após a publicação").hasBody();
-                }
+        if (cursoBanco == null) {
+            return false;
+        }
+
+        // Se já estiver publicado → aplicar restrições
+        if (Boolean.TRUE.equals(cursoBanco.getIsPublicado())) {
+
+            if (!Objects.equals(cursoBanco.getNomeCurso(), dto.nomeCurso())) {
+                throw new IllegalArgumentException("Não é permitido alterar o nome do curso após a publicação");
             }
 
-            cursoRepository.save(cursoBanco);
-            return true;
+            if (!Objects.equals(cursoBanco.getInstrutor(), dto.instrutor())) {
+                throw new IllegalArgumentException("Não é permitido alterar o instrutor após a publicação");
+            }
 
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage()).hasBody();
+            cursoBanco.atualizarCursoFromDTO(cursoBanco, dto);
+            cursoRepository.save(cursoBanco);
         }
+        return true;
     }
 
 

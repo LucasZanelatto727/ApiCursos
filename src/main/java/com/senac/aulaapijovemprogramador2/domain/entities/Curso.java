@@ -7,11 +7,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Entity
 @Data
+@Table(name = "curso")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "tipo_curso", discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorValue("CURSO")
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "curso")
 public class Curso {
 
     public Curso(Long id, String nomeCurso, String instrutor, boolean isPublicado) {
@@ -32,11 +37,27 @@ public class Curso {
     private Long id;
 
     private String nomeCurso;
+
     private String instrutor;
+
     private boolean isPublicado;
+
     private String nome;
+
     private String senha;
+
+    @Column(name="tipo_curso", insertable = false, updatable = false,nullable = true)
+    private String tipo_curso;
+
     private EnumStatusCurso status = EnumStatusCurso.ATIVO;
+
+    @ManyToMany
+    @JoinTable(
+            name = "menu_curso",
+            joinColumns = @JoinColumn( name = "curso_id"),
+            inverseJoinColumns = @JoinColumn(name = "menu_id")
+    )
+    private Set<Menu> menuAcesso;
 
     public boolean getIsPublicado() {
         return isPublicado;
@@ -47,10 +68,12 @@ public class Curso {
     }
 
     public Curso atualizarCursoFromDTO(Curso cursoBanco, CursoRequestDto dto) {
+
         cursoBanco.setNome(dto.nome());
         cursoBanco.setNomeCurso(dto.nomeCurso());
         cursoBanco.setInstrutor(dto.instrutor());
         return cursoBanco;
+
     }
 
     public String apresentar() {
