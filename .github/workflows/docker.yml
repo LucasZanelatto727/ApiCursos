@@ -40,7 +40,7 @@ jobs:
       - name: 🧪 Testar endpoint de saúde
         run: |
           echo "Testando endpoint de saúde da API..."
-          sleep 10
+          sleep 30
           curl --fail -s http://localhost:8080/api/health || 
           (echo "❌ Endpoint de saúde não respondeu corretamente" && exit 1)
           echo "✅ Endpoint respondeu com sucesso!"
