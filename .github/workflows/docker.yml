@@ -34,11 +34,10 @@ jobs:
           docker-compose ps
 
           echo "--- Logs do Banco de Dados ---"
-          docker-compose logs meu-postgres-local || echo "Serviço 'meu-postgres-local' não encontrado ou sem logs."
+          docker-compose logs postgres-db || echo "Serviço 'postgres-db' não encontrado ou sem logs."
 
           echo "--- Logs da API ---"
           docker-compose logs api-cursos || echo "Serviço 'api-cursos' não encontrado ou sem logs."
-
 
       #- name: 📞 Realizar teste de saúde na API
       #  run: curl --fail http://localhost:8080/swagger-ui/index.html
