@@ -2,7 +2,7 @@ name: CI/CD Docker build and Test
 
 on:
   push:
-    branches: ["main"]
+    branches: [ "main" ]
 
 jobs:
   build-and-test:
@@ -25,14 +25,20 @@ jobs:
           echo "Aguardando 30 segundos para os serviços iniciarem..."
           sleep 30
 
+      - name: 🚀 Subir a aplicação
+        run: docker compose up -d --build
+
       - name: 🩺 Verificar status dos contêineres
         run: |
           echo "--- Status dos Contêineres ---"
           docker-compose ps
+
           echo "--- Logs do Banco de Dados ---"
-          docker-compose logs . || echo "Serviço 'db' não encontrado ou sem logs."
+          docker-compose logs meu-postgres-local || echo "Serviço 'meu-postgres-local' não encontrado ou sem logs."
+
           echo "--- Logs da API ---"
-          docker-compose logs api-cursos || echo "Serviço 'api' não encontrado ou sem logs."
+          docker-compose logs api-cursos || echo "Serviço 'api-cursos' não encontrado ou sem logs."
+
 
       #- name: 📞 Realizar teste de saúde na API
       #  run: curl --fail http://localhost:8080/swagger-ui/index.html
@@ -40,7 +46,6 @@ jobs:
       - name: 🧪 Testar endpoint de saúde
         run: |
           echo "Testando endpoint de saúde da API..."
-          sleep 30
           curl --fail -s http://localhost:8080/api/health || 
           (echo "❌ Endpoint de saúde não respondeu corretamente" && exit 1)
           echo "✅ Endpoint respondeu com sucesso!"
