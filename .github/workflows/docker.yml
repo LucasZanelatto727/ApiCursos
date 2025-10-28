@@ -17,27 +17,40 @@ jobs:
           sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           sudo chmod +x /usr/local/bin/docker-compose
 
-      - name: 🐋 Subir ambiente com Docker Compose
-        run: docker-compose up -d
-
-      - name: ⏱️ Aguardar os contêineres estabilizarem
-        run: |
-          echo "Aguardando 30 segundos para os serviços iniciarem..."
-          sleep 30
-
-      - name: 🚀 Subir a aplicação
+      # ✅ PASSO ÚNICO: Faz o build e sobe o ambiente
+      - name: 🚀 Build e Subida da Aplicação e do DB
+        # Use '--wait' (ou a lógica de retry abaixo) e inclua '--build'
         run: docker compose up -d --build
 
       - name: 🩺 Verificar status dos contêineres
         run: |
           echo "--- Status dos Contêineres ---"
           docker-compose ps
+          # ... os logs continuam os mesmos ...
 
-          echo "--- Logs do Banco de Dados ---"
-          docker-compose logs postgres-db || echo "Serviço 'postgres-db' não encontrado ou sem logs."
-
-          echo "--- Logs da API ---"
-          docker-compose logs api-cursos || echo "Serviço 'api-cursos' não encontrado ou sem logs."
+      # ✅ PASSO MELHORADO: Testa o endpoint com lógica de retry
+      - name: 🧪 Testar endpoint de saúde com Retry
+        run: |
+          MAX_RETRIES=12  # Aumente as tentativas
+          DELAY=5         # Espera de 5s entre as tentativas (Total de até 60s)
+          URL="http://localhost:8080/api/health"
+          
+          echo "Testando endpoint de saúde da API..."
+          
+          for i in $(seq 1 $MAX_RETRIES); do
+            echo "Tentativa $i/$MAX_RETRIES: Aguardando API responder em $URL"
+            # O '-s' suprime o progresso, o '-f' faz o curl falhar em erros HTTP (4xx/5xx)
+            if curl -s -f $URL; then
+              echo "✅ Endpoint respondeu com sucesso!"
+              exit 0 # Sai do loop com sucesso
+            else
+              sleep $DELAY
+            fi
+          done
+          
+          # Se o loop terminar sem sucesso
+          echo "❌ Endpoint de saúde não respondeu após $MAX_RETRIES tentativas."
+          exit 1
 
       #- name: 📞 Realizar teste de saúde na API
       #  run: curl --fail http://localhost:8080/swagger-ui/index.html

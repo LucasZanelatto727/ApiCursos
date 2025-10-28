@@ -27,7 +27,6 @@ public class Curso {
     }
 
     public Curso(CursoRequestDto curso) {
-        this.nome = curso.nome();
         this.nomeCurso = curso.nomeCurso();
         this.instrutor = curso.instrutor();
     }
@@ -41,10 +40,6 @@ public class Curso {
     private String instrutor;
 
     private boolean isPublicado;
-
-    private String nome;
-
-    private String senha;
 
     @Column(name="tipo_curso", insertable = false, updatable = false,nullable = true)
     private String tipo_curso;
@@ -69,7 +64,6 @@ public class Curso {
 
     public Curso atualizarCursoFromDTO(Curso cursoBanco, CursoRequestDto dto) {
 
-        cursoBanco.setNome(dto.nome());
         cursoBanco.setNomeCurso(dto.nomeCurso());
         cursoBanco.setInstrutor(dto.instrutor());
         return cursoBanco;
