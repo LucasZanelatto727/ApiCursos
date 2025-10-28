@@ -17,10 +17,22 @@ jobs:
           sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           sudo chmod +x /usr/local/bin/docker-compose
 
-      # ✅ PASSO ÚNICO: Faz o build e sobe o ambiente
       - name: 🚀 Build e Subida da Aplicação e do DB
-        # Use '--wait' (ou a lógica de retry abaixo) e inclua '--build'
-        run: docker compose up -d --build
+        run: |
+          # 1. Subir apenas o DB
+          docker compose up -d postgres-db
+
+          # 2. Instalar script para aguardar a porta 5432 do DB abrir
+          echo "Aguardando DB iniciar na porta 5432..."
+          sudo apt-get update && sudo apt-get install -y netcat
+          while ! nc -z postgres-db 5432; do   
+            echo "Aguardando o contêiner postgres-db abrir a porta 5432..."
+            sleep 2
+          done
+          echo "✅ Banco de dados está pronto!"
+
+          # 3. Subir a API (agora com DB disponível)
+          docker compose up -d --build api-spring
 
       - name: 🩺 Verificar status dos contêineres
         run: |
@@ -31,7 +43,7 @@ jobs:
       # ✅ PASSO MELHORADO: Testa o endpoint com lógica de retry
       - name: 🧪 Testar endpoint de saúde com Retry
         run: |
-          MAX_RETRIES=12  # Aumente as tentativas
+          MAX_RETRIES=20  # Aumente as tentativas
           DELAY=5         # Espera de 5s entre as tentativas (Total de até 60s)
           URL="http://localhost:8080/api/health"
           
