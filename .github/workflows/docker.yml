@@ -24,18 +24,18 @@ jobs:
           docker compose up -d postgres-db
 
           # 2. Aguardar a porta 5432 do DB abrir usando o bash
-          DB_HOST="postgres-db"
+          # --- CORREÇÃO AQUI: USAR 'localhost' ---
+          DB_HOST="localhost" 
           DB_PORT="5432"
-          MAX_WAIT=20 # Máximo de 20 segundos para o DB
+          MAX_WAIT=20 
           
           echo "Aguardando o serviço $DB_HOST:$DB_PORT estar acessível..."
           for i in $(seq 1 $MAX_WAIT); do
-            # O comando abaixo tenta abrir uma conexão TCP.
-            # Se for bem-sucedido, $? será 0 (sucesso).
+            # Tenta abrir uma conexão TCP com localhost:5432 (a porta mapeada)
             (exec 3<>/dev/tcp/$DB_HOST/$DB_PORT) 2>/dev/null
             if [ $? -eq 0 ]; then
               echo "✅ Banco de dados está pronto!"
-              exec 3>&- 3<&- # Fecha a conexão
+              exec 3>&- 3<&-
               break
             fi
             sleep 1
@@ -45,7 +45,7 @@ jobs:
             fi
           done
           
-          # 3. Subir a API (agora com DB disponível)
+          # 3. Subir a API
           echo "Subindo a API-SPRING..."
           docker compose up -d --build api-spring
 
@@ -55,12 +55,11 @@ jobs:
           docker-compose ps
           # ... os logs continuam os mesmos ...
 
-      # ✅ PASSO MELHORADO: Testa o endpoint com lógica de retry
       - name: 🧪 Testar endpoint de saúde com Retry
         run: |
-          MAX_RETRIES=20  # Aumente as tentativas
-          DELAY=5         # Espera de 5s entre as tentativas (Total de até 60s)
-          URL="http://localhost:8080/api/health"
+          MAX_RETRIES=20 # 20 tentativas * 5s = 100 segundos
+          DELAY=5        
+          URL="http://localhost:8080/api/health" # Aqui o localhost já estava correto
           
           echo "Testando endpoint de saúde da API..."
           
@@ -69,13 +68,12 @@ jobs:
             # O '-s' suprime o progresso, o '-f' faz o curl falhar em erros HTTP (4xx/5xx)
             if curl -s -f $URL; then
               echo "✅ Endpoint respondeu com sucesso!"
-              exit 0 # Sai do loop com sucesso
+              exit 0 
             else
               sleep $DELAY
             fi
           done
           
-          # Se o loop terminar sem sucesso
           echo "❌ Endpoint de saúde não respondeu após $MAX_RETRIES tentativas."
           exit 1
 
