@@ -20,18 +20,33 @@ jobs:
       - name: 🚀 Build e Subida da Aplicação e do DB
         run: |
           # 1. Subir apenas o DB
+          echo "Subindo o banco de dados..."
           docker compose up -d postgres-db
 
-          # 2. Instalar script para aguardar a porta 5432 do DB abrir
-          echo "Aguardando DB iniciar na porta 5432..."
-          sudo apt-get update && sudo apt-get install -y netcat
-          while ! nc -z postgres-db 5432; do   
-            echo "Aguardando o contêiner postgres-db abrir a porta 5432..."
-            sleep 2
+          # 2. Aguardar a porta 5432 do DB abrir usando o bash
+          DB_HOST="postgres-db"
+          DB_PORT="5432"
+          MAX_WAIT=20 # Máximo de 20 segundos para o DB
+          
+          echo "Aguardando o serviço $DB_HOST:$DB_PORT estar acessível..."
+          for i in $(seq 1 $MAX_WAIT); do
+            # O comando abaixo tenta abrir uma conexão TCP.
+            # Se for bem-sucedido, $? será 0 (sucesso).
+            (exec 3<>/dev/tcp/$DB_HOST/$DB_PORT) 2>/dev/null
+            if [ $? -eq 0 ]; then
+              echo "✅ Banco de dados está pronto!"
+              exec 3>&- 3<&- # Fecha a conexão
+              break
+            fi
+            sleep 1
+            if [ $i -eq $MAX_WAIT ]; then
+              echo "❌ O banco de dados não ficou pronto após $MAX_WAIT segundos."
+              exit 1
+            fi
           done
-          echo "✅ Banco de dados está pronto!"
-
+          
           # 3. Subir a API (agora com DB disponível)
+          echo "Subindo a API-SPRING..."
           docker compose up -d --build api-spring
 
       - name: 🩺 Verificar status dos contêineres
