@@ -55,6 +55,11 @@ jobs:
           docker-compose ps
           # ... os logs continuam os mesmos ...
 
+      - name: Aguardar e Verificar Health Check
+        uses: ... # Use uma Action que possa fazer um HTTP GET e esperar um 200 OK
+        env:
+          HEALTH_URL: http://seu-servidor:8080/api/health
+
       - name: 🧪 Testar endpoint de saúde com Retry
         run: |
           MAX_RETRIES=20 # 20 tentativas * 5s = 100 segundos

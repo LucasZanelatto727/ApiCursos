@@ -1,5 +1,4 @@
-package com.senac.aulaapijovemprogramador2.infra;
-
+package com.senac.aulaapijovemprogramador2.infra.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;

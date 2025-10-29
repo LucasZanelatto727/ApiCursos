@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,8 +18,8 @@ public class CursoTecnico extends Curso {
     private String tecnologo;
 
     public CursoTecnico(Long id, String nomeCurso, String instrutor,
-                        boolean isPublicado, String tecnologo) {
-        super(id, nomeCurso, instrutor, isPublicado);
+                        boolean isPublicado, List<Disciplina> disciplina, String tecnologo) {
+        super(id, nomeCurso, instrutor, isPublicado, disciplina);
         this.tecnologo = tecnologo;
     }
 }

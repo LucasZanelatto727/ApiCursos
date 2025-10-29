@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -19,11 +20,12 @@ import java.util.Set;
 @NoArgsConstructor
 public class Curso {
 
-    public Curso(Long id, String nomeCurso, String instrutor, boolean isPublicado) {
+    public Curso(Long id, String nomeCurso, String instrutor, boolean isPublicado, List<Disciplina> disciplinas) {
         this.setId(id);
         this.setNomeCurso(nomeCurso);
         this.setInstrutor(instrutor);
         this.setisPublicado(isPublicado);
+        this.setDisciplinas(disciplinas);
     }
 
     public Curso(CursoRequestDto curso) {
@@ -40,6 +42,14 @@ public class Curso {
     private String instrutor;
 
     private boolean isPublicado;
+
+    @ManyToMany
+    @JoinTable(
+            name = "curso_disciplina", // Nome da nova tabela de junção
+            joinColumns = @JoinColumn(name = "curso_id"), // FK que referencia esta entidade (Curso)
+            inverseJoinColumns = @JoinColumn(name = "disciplina_id") // FK que referencia a outra entidade (Disciplina)
+    )
+    private List<Disciplina> disciplinas; // Renomeado para plural, que é mais descritivo
 
     @Column(name="tipo_curso", insertable = false, updatable = false,nullable = true)
     private String tipo_curso;

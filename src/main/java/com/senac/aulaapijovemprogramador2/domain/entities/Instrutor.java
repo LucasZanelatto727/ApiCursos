@@ -3,7 +3,7 @@ package com.senac.aulaapijovemprogramador2.domain.entities;
 import com.senac.aulaapijovemprogramador2.domain.valueobjects.CPF;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,8 +21,8 @@ public class Instrutor extends Usuario{
     private String salario;
     private String formacao;
 
-    // Relação exemplo: um instrutor pode lecionar vários cursos e os cursos podem ter apenas um instrutor
-    @OneToMany
+    // Relação exemplo: muitos instrutores podem lecionar vários cursos e os cursos podem ter muitos instrutores
+    @ManyToMany
     @JoinColumn(name = "curso_leciona")
     private List<Curso> leciona;
 

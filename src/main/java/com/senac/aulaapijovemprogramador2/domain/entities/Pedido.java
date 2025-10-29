@@ -32,7 +32,7 @@ public class Pedido {
     private NotaFiscal notaFiscal;
 
 
-    public double cacularLucro(){
+    public double calcularLucro(){
         return this.valor - this.custo;
     }
 
