@@ -25,7 +25,7 @@ public class Administrador extends Usuario {
 
     @Override
     public String apresentar() {
-        return " Dados do Administratod Nome: "+ this.getNome() +
+        return " Dados do Administrador Nome: "+ this.getNome() +
                 " CPF Format "+ this.getCpf().toString() + " Nivel de acesso Irrestrito: "+ this.isAcessoIrrestrito();
     }
 }
