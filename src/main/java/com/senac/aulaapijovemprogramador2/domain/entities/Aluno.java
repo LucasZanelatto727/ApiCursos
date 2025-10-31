@@ -34,16 +34,6 @@ public class Aluno extends Usuario {
         this.cursa = cursa;
     }
 
-    public List<Curso> getCursos() {
-
-        return cursa;
-    }
-
-    public void setCursos(List<Curso> cursa) {
-
-        this.cursa = cursa;
-    }
-
     @Override
     public String apresentar() {
         return "Você está matriculado nos cursos de " + this.cursa + ". Sua nota é "

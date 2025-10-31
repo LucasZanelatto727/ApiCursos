@@ -17,80 +17,47 @@ jobs:
           sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           sudo chmod +x /usr/local/bin/docker-compose
 
-      - name: 🚀 Build e Subida da Aplicação e do DB
-        run: |
-          # 1. Subir apenas o DB
-          echo "Subindo o banco de dados..."
-          docker compose up -d postgres-db
+      - name: 🐋 Subir ambiente com Docker Compose
+        run: docker-compose up -d
 
-          # 2. Aguardar a porta 5432 do DB abrir usando o bash
-          # --- CORREÇÃO AQUI: USAR 'localhost' ---
-          DB_HOST="localhost" 
-          DB_PORT="5432"
-          MAX_WAIT=20 
-          
-          echo "Aguardando o serviço $DB_HOST:$DB_PORT estar acessível..."
-          for i in $(seq 1 $MAX_WAIT); do
-            # Tenta abrir uma conexão TCP com localhost:5432 (a porta mapeada)
-            (exec 3<>/dev/tcp/$DB_HOST/$DB_PORT) 2>/dev/null
-            if [ $? -eq 0 ]; then
-              echo "✅ Banco de dados está pronto!"
-              exec 3>&- 3<&-
-              break
-            fi
-            sleep 1
-            if [ $i -eq $MAX_WAIT ]; then
-              echo "❌ O banco de dados não ficou pronto após $MAX_WAIT segundos."
-              exit 1
-            fi
-          done
-          
-          # 3. Subir a API
-          echo "Subindo a API-SPRING..."
-          docker compose up -d --build api-spring
+      - name: ⏱️ Aguardar os contêineres estabilizarem
+        run: |
+          echo "Aguardando 30 segundos para os serviços iniciarem..."
+          sleep 30
 
       - name: 🩺 Verificar status dos contêineres
         run: |
-          echo "--- Status dos Contêineres ---"
-          docker-compose ps
-          # ... os logs continuam os mesmos ...
+          echo "--- Status dos Contêineres (incluindo os que falharam) ---"
+          docker-compose ps -a
+          
+          echo "--- Logs do Banco de Dados ---"
+          docker-compose logs meu-postgres-local 
+          
+          echo "--- Logs da API ---"
+          docker-compose logs api-cursos
 
-      - name: Aguardar e Verificar Health Check
-        uses: ... # Use uma Action que possa fazer um HTTP GET e esperar um 200 OK
-        env:
-          HEALTH_URL: http://localhost:8080/api/health
-
-      - name: 🧪 Testar endpoint de saúde com Retry
+      - name: 📞 Testar API (com retentativas)
         run: |
-          MAX_RETRIES=20 # 20 tentativas * 5s = 100 segundos
-          DELAY=5        
-          URL="http://localhost:8080/api/health" # Aqui o localhost já estava correto
+          echo "Aguardando a API ficar online... (Máx 2 min)"
+          n=0
+          until [ $n -ge 12 ]
+          do
+          # O "curl --fail" falha com exit code se o HTTP não for 200
+          if curl --fail http://localhost:8080/swagger-ui/index.html; then
+            echo "✅ API está online!"
+            break # Sucesso, sai do loop
+          fi
           
-          echo "Testando endpoint de saúde da API..."
-          
-          for i in $(seq 1 $MAX_RETRIES); do
-            echo "Tentativa $i/$MAX_RETRIES: Aguardando API responder em $URL"
-            # O '-s' suprime o progresso, o '-f' faz o curl falhar em erros HTTP (4xx/5xx)
-            if curl -s -f $URL; then
-              echo "✅ Endpoint respondeu com sucesso!"
-              exit 0 
-            else
-              sleep $DELAY
-            fi
+          n=$((n+1))
+          echo "Tentativa $n/12 falhou. Aguardando 10s..."
+          sleep 10
           done
           
-          echo "❌ Endpoint de saúde não respondeu após $MAX_RETRIES tentativas."
+          # Se o loop terminar (n=12) sem sucesso, falha o build
+          if [ $n -eq 12 ]; then
+          echo "❌ API não respondeu após 2 minutos."
           exit 1
-
-      #- name: 📞 Realizar teste de saúde na API
-      #  run: curl --fail http://localhost:8080/swagger-ui/index.html
-
-      - name: 🧪 Testar endpoint de saúde
-        run: |
-          echo "Testando endpoint de saúde da API..."
-          curl --fail -s http://localhost:8080/api/health || 
-          (echo "❌ Endpoint de saúde não respondeu corretamente" && exit 1)
-          echo "✅ Endpoint respondeu com sucesso!"
+          fi
 
       - name: 🛑 Parar os contêineres após teste
         if: always()

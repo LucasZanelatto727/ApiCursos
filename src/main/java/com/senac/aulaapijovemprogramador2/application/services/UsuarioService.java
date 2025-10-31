@@ -7,7 +7,6 @@ import com.senac.aulaapijovemprogramador2.domain.entities.Usuario;
 import com.senac.aulaapijovemprogramador2.domain.repository.UsuarioRepository;
 import com.senac.aulaapijovemprogramador2.domain.valueobjects.EnumStatusUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -20,19 +20,6 @@ import java.util.Set;
 @NoArgsConstructor
 public class Curso {
 
-    public Curso(Long id, String nomeCurso, String instrutor, boolean isPublicado, List<Disciplina> disciplinas) {
-        this.setId(id);
-        this.setNomeCurso(nomeCurso);
-        this.setInstrutor(instrutor);
-        this.setisPublicado(isPublicado);
-        this.setDisciplinas(disciplinas);
-    }
-
-    public Curso(CursoRequestDto curso) {
-        this.nomeCurso = curso.nomeCurso();
-        this.instrutor = curso.instrutor();
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -70,6 +57,19 @@ public class Curso {
 
     public void setisPublicado(boolean isPublicado) {
         this.isPublicado = isPublicado;
+    }
+
+    public Curso(Long id, String nomeCurso, String instrutor, boolean isPublicado, List<Disciplina> disciplinas) {
+        this.setId(id);
+        this.setNomeCurso(nomeCurso);
+        this.setInstrutor(instrutor);
+        this.setisPublicado(isPublicado);
+        this.setDisciplinas(disciplinas);
+    }
+
+    public Curso(CursoRequestDto curso) {
+        this.nomeCurso = curso.nomeCurso();
+        this.instrutor = curso.instrutor();
     }
 
     public Curso atualizarCursoFromDTO(Curso cursoBanco, CursoRequestDto dto) {
