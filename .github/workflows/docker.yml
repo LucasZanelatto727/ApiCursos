@@ -27,9 +27,11 @@ jobs:
 
       - name: 🩺 Verificar status dos contêineres
         run: |
+          echo "--- Status dos Contêineres (incluindo os que falharam) ---"
+          docker-compose ps -a
           
           echo "--- Logs do Banco de Dados ---"
-          docker-compose logs meu-postgres-local 
+          docker-compose logs postgres-db 
           
           echo "--- Logs da API ---"
           docker-compose logs api-cursos
