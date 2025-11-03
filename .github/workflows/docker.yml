@@ -25,8 +25,8 @@ jobs:
           echo "Aguardando 30 segundos para os serviços iniciarem..."
           sleep 30
 
-      - name: 🩺 Verificar status dos contêineres
-        run: |
+      #- name: 🩺 Verificar status dos contêineres
+        #run: |
           echo "--- Status dos Contêineres (incluindo os que falharam) ---"
           docker-compose ps -a
           
