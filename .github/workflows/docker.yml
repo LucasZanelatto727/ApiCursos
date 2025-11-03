@@ -34,7 +34,7 @@ jobs:
           docker-compose logs postgres-db 
           
           echo "--- Logs da API ---"
-          docker-compose logs api-cursos
+          docker-compose logs api-spring
 
       - name: 📞 Testar API (com retentativas)
         run: |
