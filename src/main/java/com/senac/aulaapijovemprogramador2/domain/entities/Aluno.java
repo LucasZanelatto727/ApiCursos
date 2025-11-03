@@ -1,9 +1,7 @@
 package com.senac.aulaapijovemprogramador2.domain.entities;
 
 import com.senac.aulaapijovemprogramador2.domain.valueobjects.CPF;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,20 +22,22 @@ public class Aluno extends Usuario {
 
     //Relação exemplo: um aluno pode cursar vários cursos e um curso pode ter vários alunos
     @ManyToMany
-    @JoinColumn(name = "curso-cursa")
-    private List<Curso> cursa;
+    @JoinTable(name = "aluno_curso",
+            joinColumns = @JoinColumn(name = "aluno_id"),
+            inverseJoinColumns = @JoinColumn(name = "curso_id"))
+    private List<Curso> cursos;
 
     public Aluno(Long id, String nome, CPF cpf, String email, String telefone,
-                 List<Curso> cursa, String frequencia, String nota) {
+                 String frequencia, String nota, List<Curso> cursos) {
         super(id, nome, cpf, email, telefone);
         this.frequencia = frequencia;
         this.nota = nota;
-        this.cursa = cursa;
+        this.cursos = cursos;
     }
 
     @Override
     public String apresentar() {
-        return "Você está matriculado nos cursos de " + this.cursa + ". Sua nota é "
+        return "Você está matriculado nos cursos de " + this.cursos + ". Sua nota é "
                 + this.nota + " e sua frequência é " + this.frequencia;
     }
 }

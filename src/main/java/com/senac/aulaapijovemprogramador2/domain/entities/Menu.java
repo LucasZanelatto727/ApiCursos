@@ -14,15 +14,15 @@ import java.util.Set;
 @AllArgsConstructor
 public class Menu {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String descricao;
+    private String rota;
 
     public Menu(String rota, String descricao) {
         this.descricao = descricao;
         this.rota = rota;
     }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String descricao;
-    private String rota;
 }

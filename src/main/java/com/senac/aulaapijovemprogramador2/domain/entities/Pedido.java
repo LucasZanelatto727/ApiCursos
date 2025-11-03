@@ -26,11 +26,13 @@ public class Pedido {
     @JoinColumn(name = "empresa_id")
     private Empresa empresa;
 
-
     @OneToOne
     @JoinColumn(name = "nota_id")
     private NotaFiscal notaFiscal;
 
+    @ManyToOne
+    @JoinColumn(name = "id_usuario")
+    private Usuario usuario;
 
     public double calcularLucro(){
         return this.valor - this.custo;
