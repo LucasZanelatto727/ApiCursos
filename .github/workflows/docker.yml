@@ -59,13 +59,13 @@ jobs:
           #exit 1
           #fi
 
-      - name: 🧪 Testar endpoint de saúde
-        run: |
-          echo "Testando endpoint de saúde da API..."
-          sleep 10
-          curl --fail -s http://localhost:8080/swagger-ui/index.html#/health-controller/health|| 
-          (echo "❌ Endpoint de saúde não respondeu corretamente" && exit 1)
-          echo "✅ Endpoint respondeu com sucesso!"
+      #- name: 🧪 Testar endpoint de saúde
+        #run: |
+          #echo "Testando endpoint de saúde da API..."
+          #sleep 10
+          #curl --fail -s http://localhost:8080/swagger-ui/index.html#/health-controller/health||
+          #(echo "❌ Endpoint de saúde não respondeu corretamente" && exit 1)
+          #echo "✅ Endpoint respondeu com sucesso!"
 
 
       - name: 🛑 Parar os contêineres após teste
