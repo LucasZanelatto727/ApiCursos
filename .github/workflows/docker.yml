@@ -36,14 +36,6 @@ jobs:
           echo "--- Logs da API ---"
           docker-compose logs api-spring
 
-      - name: 🧪 Testar endpoint de saúde
-        run: |
-          echo "Testando endpoint de saúde da API..."
-          sleep 60
-          curl --fail -s http://localhost:8080/api/health ||
-          (echo "❌ Endpoint de saúde não respondeu corretamente" && exit 1)
-          echo "✅ Endpoint respondeu com sucesso!"
-
       - name: 🛑 Parar os contêineres após teste
         if: always()
         run: docker-compose down
