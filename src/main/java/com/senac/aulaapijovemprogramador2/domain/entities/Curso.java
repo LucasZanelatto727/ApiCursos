@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -20,6 +21,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class Curso {
 
+    //colunas
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,6 +32,17 @@ public class Curso {
 
     private boolean isPublicado;
 
+    @Column(name="tipo_curso", insertable = false, updatable = false,nullable = true)
+    private String tipo_curso;
+
+    private EnumStatusCurso status = EnumStatusCurso.ATIVO;
+
+    private LocalDateTime dataInicioCurso;
+
+    private LocalDateTime dataTerminoCurso;
+
+    //foreghts keys (FK)
+
     @ManyToMany
     @JoinTable(
             name = "curso_disciplina", // Nome da nova tabela de junção
@@ -38,18 +51,7 @@ public class Curso {
     )
     private List<Disciplina> disciplinas; // Renomeado para plural, que é mais descritivo
 
-    @Column(name="tipo_curso", insertable = false, updatable = false,nullable = true)
-    private String tipo_curso;
-
-    private EnumStatusCurso status = EnumStatusCurso.ATIVO;
-
-    @ManyToMany
-    @JoinTable(
-            name = "menu_curso",
-            joinColumns = @JoinColumn( name = "curso_id"),
-            inverseJoinColumns = @JoinColumn(name = "menu_id")
-    )
-    private Set<Menu> menuAcesso;
+    //métodos
 
     public boolean getIsPublicado() {
         return isPublicado;
@@ -59,11 +61,14 @@ public class Curso {
         this.isPublicado = isPublicado;
     }
 
-    public Curso(Long id, String nomeCurso, String instrutor, boolean isPublicado, List<Disciplina> disciplinas) {
+    public Curso(Long id, String nomeCurso, String instrutor, boolean isPublicado,
+                 LocalDateTime dataInicioCurso, LocalDateTime dataTerminoCurso, List<Disciplina> disciplinas) {
         this.setId(id);
         this.setNomeCurso(nomeCurso);
         this.setInstrutor(instrutor);
         this.setisPublicado(isPublicado);
+        this.setDataInicioCurso(dataInicioCurso);
+        this.setDataTerminoCurso(dataTerminoCurso);
         this.setDisciplinas(disciplinas);
     }
 

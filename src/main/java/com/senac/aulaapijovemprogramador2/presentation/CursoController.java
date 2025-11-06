@@ -28,7 +28,6 @@ public class CursoController {
         return ResponseEntity.ok(cursoService.listarTodos());
     }
 
-
     @GetMapping("/{id}")
     @Operation(summary = "Consulta de curso por ID", description = "Médoto responsável por consultar um único curso por ID e se não existir retorna null!")
     public ResponseEntity<?> buscarCursoPorId(@PathVariable Long id) {
@@ -49,7 +48,6 @@ public class CursoController {
         }
     }
 
-
     @PostMapping
     @Operation(summary = "Criar Cursos", description = "Método responsável por criar os cursos!")
     public ResponseEntity<?> criarCursos(@RequestBody CursoRequestDto curso) {
@@ -61,7 +59,6 @@ public class CursoController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
 
     @PutMapping("/{id}")
     @Operation(summary = "Atualizar curso", description = "Método resposável por atualizar usuário!")
@@ -84,7 +81,6 @@ public class CursoController {
                 ResponseEntity.notFound().build();
     }
 
-
     @PatchMapping("/{id}/bloquear")
     @Operation(summary = "Bloquear de curso!", description = "Método responsável por Bloquear um curso!")
     public ResponseEntity<?> atualizarBloquear(@PathVariable Long id) {
@@ -102,7 +98,6 @@ public class CursoController {
                 ResponseEntity.ok().build() :
                 ResponseEntity.notFound().build();
     }
-
 
     @PatchMapping("/{id}/publicar")
     @Operation(summary = "Publicar um curso!", description = "Método responsável por Publicar um curso (isPublicado = true)")
