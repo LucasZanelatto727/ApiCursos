@@ -21,6 +21,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class Usuario {
 
+    //colunas
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -41,6 +42,7 @@ public class Usuario {
 
     private EnumStatusUsuario status = EnumStatusUsuario.ATIVO;
 
+    //foreght keys (FK)
     @ManyToMany
     @JoinTable(
             name = "menu_usuario",
@@ -49,6 +51,11 @@ public class Usuario {
     )
     private Set<Menu> menuAcesso;
 
+    @ManyToOne
+    @JoinColumn(name = "empresa_id")
+    private Empresa empresa;
+
+    //métodos
     public Usuario (UsuarioCriarRequestDto usuario){
         this.email =usuario.email();
         this.senha = usuario.senha();

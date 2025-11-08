@@ -9,11 +9,13 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Entity
+@Table(name = "empresa")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Empresa {
 
+    //colunas
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,6 +24,7 @@ public class Empresa {
 
     private String nomeFantasia;
 
+    //métodos
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "empresa_id")
     private List<Pedido> pedidos;

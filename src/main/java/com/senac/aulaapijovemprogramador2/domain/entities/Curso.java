@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Data
@@ -51,6 +50,10 @@ public class Curso {
     )
     private List<Disciplina> disciplinas; // Renomeado para plural, que é mais descritivo
 
+    @ManyToOne
+    @JoinColumn(name = "empresa_id")
+    private Empresa empresa;
+
     //métodos
 
     public boolean getIsPublicado() {
@@ -85,7 +88,7 @@ public class Curso {
 
     }
 
-    public String apresentar() {
+    public String apresentarAluno() {
 
         return "Você está matriculado no curso de "
                 + this.nomeCurso + " com o instrutor " + this.instrutor;

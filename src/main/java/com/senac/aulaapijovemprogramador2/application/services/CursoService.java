@@ -31,7 +31,8 @@ public class CursoService {
 
     public CursoResponseDto buscarPorId(Long id) {
 
-        return cursoRepository.findByIdAndStatusNot(id, EnumStatusCurso.EXCLUIDO)
+        return cursoRepository
+                .findByIdAndStatusNot(id, EnumStatusCurso.EXCLUIDO)
                 .stream()
                 .map(CursoResponseDto::new)
                 .findFirst()
@@ -147,7 +148,6 @@ public class CursoService {
         }
         return true;
     }
-
 
     private void alterarStatusCurso(Curso curso, EnumStatusCurso statusCurso) {
         curso.setStatus(statusCurso);

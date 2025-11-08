@@ -4,6 +4,7 @@ import com.senac.aulaapijovemprogramador2.application.dto.curso.CursoRequestDto;
 import com.senac.aulaapijovemprogramador2.application.dto.curso.CursoResponseDto;
 import com.senac.aulaapijovemprogramador2.application.services.CursoService;
 
+import com.senac.aulaapijovemprogramador2.domain.entities.Curso;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;

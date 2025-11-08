@@ -4,6 +4,7 @@ import com.senac.aulaapijovemprogramador2.domain.valueobjects.CPF;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,14 +19,21 @@ import java.util.List;
 @DiscriminatorValue("INSTRUTOR")
 public class Instrutor extends Usuario{
 
+    //colunas
     private String salario;
     private String formacao;
 
+    //foreght keys (FK)
     // Relação exemplo: muitos instrutores podem lecionar vários cursos e os cursos podem ter muitos instrutores
     @ManyToMany
     @JoinColumn(name = "curso_leciona")
     private List<Curso> leciona;
 
+    @ManyToOne
+    @JoinColumn(name = "empresa_id")
+    private Empresa empresa;
+
+    //métodos
     public Instrutor(Long id , String nome, CPF cpf, String email, String telefone,
                      String salario, String formacao, List<Curso> leciona){
         super(id, nome, cpf, email, telefone);

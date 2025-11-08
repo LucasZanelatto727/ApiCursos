@@ -13,10 +13,12 @@ import java.util.List;
 @AllArgsConstructor
 public class Disciplina {
 
+    //colunas
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    //foreght keys (FK)
     // Relação exemplo: um curso pode ter várias disciplinas e uma disciplina pode estar presente em vários cursos
     @ManyToMany(mappedBy = "disciplinas") // O nome do campo na entidade Curso (plural)
     private List<Curso> cursos; // Renomeado para plural

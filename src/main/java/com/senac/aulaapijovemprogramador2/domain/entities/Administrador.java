@@ -16,8 +16,10 @@ import lombok.NoArgsConstructor;
 @DiscriminatorValue("ADMIN")
 public class Administrador extends Usuario {
 
+    //colunas
     private boolean acessoIrrestrito;
 
+    //métodos
     public Administrador(UsuarioCriarRequestDto usuarioRequest) {
         super(usuarioRequest);
         this.setAcessoIrrestrito(true);

@@ -17,9 +17,11 @@ import java.util.List;
 @DiscriminatorValue("ALUNO")
 public class Aluno extends Usuario {
 
+    //colunas
     private String frequencia;
     private String nota;
 
+    //foreght keys (FK)
     //Relação exemplo: um aluno pode cursar vários cursos e um curso pode ter vários alunos
     @ManyToMany
     @JoinTable(name = "aluno_curso",
@@ -27,6 +29,11 @@ public class Aluno extends Usuario {
             inverseJoinColumns = @JoinColumn(name = "curso_id"))
     private List<Curso> cursos;
 
+    @ManyToOne
+    @JoinColumn(name = "empresa_id")
+    private Empresa empresa;
+
+    //métodos
     public Aluno(Long id, String nome, CPF cpf, String email, String telefone,
                  String frequencia, String nota, List<Curso> cursos) {
         super(id, nome, cpf, email, telefone);

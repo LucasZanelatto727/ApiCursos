@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class NotaFiscal {
 
+    //colunas
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,8 +19,13 @@ public class NotaFiscal {
     private double valor;
     private String numero;
 
+    //foreght keys (FK)
     @OneToOne
     @JoinColumn(name = "id_pedido", unique = true)
     private Pedido pedido;
+
+    @ManyToOne
+    @JoinColumn(name = "empresa_id")
+    private Empresa empresa;
 
 }

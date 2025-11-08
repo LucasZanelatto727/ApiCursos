@@ -1,6 +1,8 @@
 package com.senac.aulaapijovemprogramador2.domain.entities;
 
 import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,8 +18,15 @@ import java.util.List;
 @DiscriminatorValue("CURSO-TÉCNICO")
 public class CursoTecnico extends Curso {
 
+    //colunas
     private String tecnologo;
 
+    //foreght keys (FK)
+    @ManyToOne
+    @JoinColumn(name = "empresa_id")
+    private Empresa empresa;
+
+    //métodos
     public CursoTecnico(Long id, String nomeCurso, String instrutor,
                         boolean isPublicado, LocalDateTime dataInicioCurso, LocalDateTime dataTerminoCurso,
                         List<Disciplina> disciplina, String tecnologo) {

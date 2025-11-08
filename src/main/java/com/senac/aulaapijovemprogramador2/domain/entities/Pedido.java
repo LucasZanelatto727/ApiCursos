@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Pedido {
 
+    //colunas
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,6 +23,7 @@ public class Pedido {
     private String status;
     private double custo;
 
+    //foreght keys (FK)
     @ManyToOne
     @JoinColumn(name = "empresa_id")
     private Empresa empresa;
@@ -34,6 +36,7 @@ public class Pedido {
     @JoinColumn(name = "id_usuario")
     private Usuario usuario;
 
+    //métodos
     public double calcularLucro(){
         return this.valor - this.custo;
     }
