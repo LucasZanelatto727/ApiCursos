@@ -23,7 +23,7 @@ public class AuthController {
     @Operation(summary = "Autenticação de usuário", description = "Método para fazer logotipos")
     public ResponseEntity<?> login(@RequestBody LoginRequestDto login) {
 
-        if (login.email().equals("string") && login.senha().equals("string")) {
+        if (login.email().equals("lucaszanelatto_@hotmail.com") && login.senha().equals("150699")) {
 
             var token = tokenService.gerarToken(login);
             if(token == null){
