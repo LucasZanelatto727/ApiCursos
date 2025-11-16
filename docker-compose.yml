@@ -11,7 +11,7 @@ services:
     volumes:
       - postgres-data-local:/var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres -d postgres" ]
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d cursos-api" ]
       interval: 10s       # Tenta a cada 10 segundos
       timeout: 5s
       retries: 10         # Aumentamos as tentativas para 10
