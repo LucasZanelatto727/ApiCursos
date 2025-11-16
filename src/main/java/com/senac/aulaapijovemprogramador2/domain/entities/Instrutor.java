@@ -24,7 +24,7 @@ public class Instrutor extends Usuario{
     private String formacao;
 
     //foreght keys (FK)
-    // Relação exemplo: muitos instrutores podem lecionar vários cursos e os cursos podem ter muitos instrutores
+    // Relação exemplo: um instrutor pode lecionar vários cursos e um curso pode ter muitos instrutores
     @ManyToMany
     @JoinColumn(name = "curso_leciona")
     private List<Curso> leciona;
