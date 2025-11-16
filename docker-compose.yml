@@ -3,7 +3,7 @@ services:
     image: postgres:latest
     container_name: meu-postgres-local
     ports:
-      - "5434:5432"
+      - "5432:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=150699
@@ -12,8 +12,8 @@ services:
       - postgres-data-local:/var/lib/postgresql/data
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres -d cursos-api" ]
-      interval: 2s       # Tenta a cada 10 segundos
-      timeout: 1s
+      interval: 10s       # Tenta a cada 10 segundos
+      timeout: 5s
       retries: 10         # Aumentamos as tentativas para 10
       start_period: 30s   # <-- A GRANDE MUDANÇA
 
