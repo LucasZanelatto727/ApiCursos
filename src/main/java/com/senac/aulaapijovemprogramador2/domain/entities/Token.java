@@ -24,7 +24,7 @@ public class Token {
     private LocalDateTime dataExpiracao;
 
     //foreght keys (FK)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "usuario_id", nullable = false)
     private Usuario usuario;
 
