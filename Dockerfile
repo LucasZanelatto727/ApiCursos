@@ -11,6 +11,7 @@ COPY src ./src
 
 RUN mvn clean package -DskipTests
 
+
 # Rodar o codigo
 
 FROM eclipse-temurin:21-jre-jammy
