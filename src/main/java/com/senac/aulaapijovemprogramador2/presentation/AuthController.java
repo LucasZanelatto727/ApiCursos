@@ -1,6 +1,5 @@
 package com.senac.aulaapijovemprogramador2.presentation;
 
-
 import com.senac.aulaapijovemprogramador2.application.dto.auth.LoginRequestDto;
 import com.senac.aulaapijovemprogramador2.application.dto.auth.LoginResponseDto;
 import com.senac.aulaapijovemprogramador2.application.services.TokenService;
@@ -26,7 +25,7 @@ public class AuthController {
         if (login.email().equals("lucaszanelatto_@hotmail.com") && login.senha().equals("150699")) {
 
             var token = tokenService.gerarToken(login);
-            if(token == null){
+            if (token == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
 
